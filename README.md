@@ -61,4 +61,4 @@ Youtube Data API v3
 Twitch Helix API
 
 ## ER図
-https://i.gyazo.com/4fab4126f0340198441d3fc7548bb284.png
+https://i.gyazo.com/a42b3b66db5d72fc515579072ae030f6.png
