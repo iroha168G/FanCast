@@ -59,3 +59,6 @@ Render
 - API
 Youtube Data API v3
 Twitch Helix API
+
+## ER図
+https://i.gyazo.com/358c521067ba7ca21835c674d9b8250d.png
