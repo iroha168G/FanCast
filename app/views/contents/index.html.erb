@@ -1,5 +1,10 @@
 <%= render "shared/header" %>
 <body class="bg-gray-100">
-  <h1>Hello, FanCast!</h1>
-  <p>これは Contents#index のページです。</p>
+  <h1>YouTube APIテスト</h1>
+  <p>取得した動画タイトル: <%= @title %></p>
+
+  <% if @thumbnail_url %>
+    <p>サムネイル:</p>
+    <img src="<%= @thumbnail_url %>" alt="動画サムネイル">
+  <% end %>
 </body>
