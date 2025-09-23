@@ -1,10 +1,17 @@
 <%= render "shared/header" %>
 <body class="bg-gray-100">
-  <h1>YouTube APIテスト</h1>
-  <p>取得した動画タイトル: <%= @title %></p>
-
-  <% if @thumbnail_url %>
-    <p>サムネイル:</p>
-    <img src="<%= @thumbnail_url %>" alt="動画サムネイル">
-  <% end %>
+  <div class="grid grid-cols-5 gap-4 m-5">
+    <% @videos.each do |video| %>
+      <div class="shadow-md rounded bg-white w-70 h-75 overflow-hidden">
+        <%= image_tag "yt_icon_red_digital.png", alt: "Youtube", class: "w-8 h-8 -m-0.5" %>
+        <div class="w-full aspect-[16/9] p-1">
+          <img src="<%= video.snippet.thumbnails.high.url %>"
+               alt="<%= video.snippet.title %>"
+               class="w-full h-full rounded object-cover"
+          >
+        </div>
+        <p class="p-2 text-sm font-medium"><%= video.snippet.title %></p>
+      </div>
+    <% end %>
+  </div>
 </body>
