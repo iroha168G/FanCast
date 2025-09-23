@@ -1,6 +1,11 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+if Rails.env.test?
+  youtube_mock = Minitest::Mock.new
+  youtube_mock.expect :list_searches, OpenStruct.new(items: []), ['snippet', event_type: 'live']
+  Rails.application.config.youtube_service = youtube_mock
+end
 
 module ActiveSupport
   class TestCase
