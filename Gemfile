@@ -58,4 +58,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem 'google-apis-youtube_v3'
+gem "google-apis-youtube_v3"
