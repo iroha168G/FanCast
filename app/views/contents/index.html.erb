@@ -1,16 +1,41 @@
 <%= render "shared/header" %>
 <body class="bg-gray-100">
-  <div class="grid grid-cols-5 gap-4 m-5">
+  <div class="grid gap-4 justify-center box-border grid-cols-[repeat(auto-fit,minmax(260px,1fr))] p-10 mx-auto max-w-screen-xl">
     <% @videos.each do |video| %>
-      <div class="shadow-md rounded bg-white w-70 h-75 overflow-hidden">
-        <%= image_tag "yt_icon_red_digital.png", alt: "Youtube", class: "w-8 h-8 -m-0.5" %>
-        <div class="w-full aspect-[16/9] p-1">
-          <img src="<%= video.snippet.thumbnails.high.url %>"
-               alt="<%= video.snippet.title %>"
-               class="w-full h-full rounded object-cover"
-          >
+      <div class="shadow-md rounded bg-white w-70 h-80 overflow-hidden">
+        <!-- 動画サイト -->
+        <div class="flex">
+          <%= image_tag "yt_icon_red_digital.png", alt: "Youtube", class: "w-8 h-8 -m-0.5" %>
+          <% if video[:live_starttime].present? %>
+            <p class="text m-1"><%= video[:live_starttime].strftime("%Y/%m/%d %H:%M") %></p>
+          <% end %>
         </div>
-        <p class="p-2 text-sm font-medium"><%= video.snippet.title %></p>
+        <%= link_to "https://www.youtube.com/watch?v=#{video[:video_id]}", class: "block  text-blue-600 visited:text-purple-600 hover:underline", target: "_blank", rel: "noopener noreferrer" do %>
+          <!-- 動画サムネイル -->
+          <div class="w-full aspect-[16/9] p-1">
+            <img src="<%= video[:video_thumbnail] %>"
+                 alt="<%= video[:title] %>"
+                 class="w-full h-full rounded object-cover"
+            >
+          </div>
+          <!-- 動画タイトル -->
+            <p class="px-2 text-sm font-medium line-clamp-2 break-words overflow-hidden"><%= video[:title] %></p>
+        <% end %>
+        <!-- チャンネル情報 -->
+        <div class="p-2 text-sm flex items-center gap-2">
+          <img src="<%= video[:channel_icon] %>" 
+               alt="<%= video[:channel_title] %>" 
+               class="w-10 h-10 rounded-full">
+          <div class="flex-col">
+            <%= link_to video[:channel_title], "https://www.youtube.com/channel/#{video[:channel_id]}",
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        class: "text-sm font-medium line-clamp-1 break-words overflow-hidden text-blue-600 visited:text-purple-600 hover:underline" %>
+            <% if video[:live_viewers].present? %>
+              <p class="text-sm text-gray-500"><%= number_with_delimiter(video[:live_viewers]) %>人 視聴中</p>
+            <% end %>
+          </div>
+        </div>
       </div>
     <% end %>
   </div>
