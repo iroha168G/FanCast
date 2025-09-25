@@ -1,0 +1,23 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">ログイン</h2>
+
+    <%= form_with url: login_path, local: true, class: "auth-form" do |f| %>
+      <div class="form-group">
+        <%= f.label :email, "メールアドレス", class: "form-label" %>
+        <%= f.email_field :email, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "パスワード", class: "form-label" %>
+        <%= f.password_field :password, class: "form-input" %>
+      </div>
+
+      <%= f.submit "ログイン", class: "btn-primary" %>
+    <% end %>
+
+    <div class="auth-footer">
+      <%= link_to "新規登録はこちら" %>
+    </div>
+  </div>
+</div>
