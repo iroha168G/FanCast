@@ -1,5 +1,9 @@
 <header class = "bg-white p-4">
   <div class = "text-right">
-    <%= link_to "ログイン", new_login_path, class: 'text-blue-600 visited:text-purple-600 hover:underline' %>
+    <% if logged_in? %>
+      <%= link_to "ログアウト", logout_path, class: "ui inverted button text-blue-600 visited:text-purple-600 hover:underline", data: { turbo_method: :delete, turbo_confirm: " 本当にログアウトしますか？"} %>
+    <% else %>
+      <%= link_to "ログイン", login_path, class: "ui inverted button text-blue-600 visited:text-purple-600 hover:underline" %>
+    <% end %>
   </div>
 </header>
