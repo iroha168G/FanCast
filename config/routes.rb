@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   # サインアップ
   get "signup", to: "users#new", as: :signup
-  resources :users, only: [:create]
+  resources :users, only: [ :create ]
 
   # ログイン
   get    "login",  to: "sessions#new"
