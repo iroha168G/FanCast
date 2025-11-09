@@ -23,7 +23,13 @@
 <nav id="menu" class="hidden bg-gray-700 text-white p-4">
   <ul class="space-y-2">
     <% if current_user %>
+      <li><%= "ホーム" %></li>
+      <li><%= "チャンネルを探す" %></li>
+      <li><%= "登録チャンネル" %></li>
       <li><%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "block hover:text-gray-300" %></li>
+      <hr class="my-2 border-gray-400">
+      <li><%= "タイムゾーン" %></li>
+      <li><%= "言語" %></li>
     <% else %>
       <li><%= link_to "ログイン", login_path, class: "block hover:text-gray-300" %></li>
     <% end %>
