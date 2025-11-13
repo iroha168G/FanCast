@@ -1,6 +1,6 @@
 class ChannelsController < ApplicationController
-  #ログインしてるユーザーのみアクセス許可
-  before_action :require_login, only: [:new, :create]
+  # ログインしてるユーザーのみアクセス許可
+  before_action :require_login, only: [:new, :create, :index]
 
   def index
   end
