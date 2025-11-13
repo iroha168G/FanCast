@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "channels/index"
+  get "channels/new"
+  get "channels/create"
   root "contents#index"
 
   # サインアップ
@@ -9,6 +12,9 @@ Rails.application.routes.draw do
   get    "login",  to: "sessions#new"
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+
+  # チャンネル登録画面
+  resources :channels, only: [ :index, :new, :create]
 
   # その他（健康チェックやPWA関連）
   get "up" => "rails/health#show", as: :rails_health_check
