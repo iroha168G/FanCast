@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get "channels/index"
-  get "channels/new"
+  get "channels/search"
   get "channels/create"
   root "contents#index"
 
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   # チャンネル登録画面
-  resources :channels, only: [ :index, :new, :create]
+  resources :channels, only: [ :index, :search, :create]
 
   # その他（健康チェックやPWA関連）
   get "up" => "rails/health#show", as: :rails_health_check
