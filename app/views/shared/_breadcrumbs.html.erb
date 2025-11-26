@@ -1,0 +1,23 @@
+<nav class="text-sm text-gray-600 mb-4">
+  <ol class="list-none p-0 inline-flex gap-1">
+    <% @breadcrumbs.each_with_index do |crumb, i| %>
+      <% is_current = (i == @breadcrumbs.size - 1) %>
+
+      <li class="inline-flex items-center">
+        <% if is_current %>
+          <!-- 現在のページ（リンクなし・強調） -->
+          <span class="font-semibold text-black">
+            <%= crumb[:label] %>
+          </span>
+        <% else %>
+          <!-- その他のページ（リンクあり） -->
+          <%= link_to crumb[:label], crumb[:path], class: "text-blue-600 hover:underline" %>
+        <% end %>
+
+        <% if i < @breadcrumbs.size - 1 %>
+          <span class="mx-2">›</span>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+</nav>

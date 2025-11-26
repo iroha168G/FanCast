@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
   include SessionsHelper
+  before_action :set_breadcrumbs
 
   helper_method :current_user, :logged_in?
 
@@ -17,5 +18,19 @@ class ApplicationController < ActionController::Base
     unless logged_in?
       redirect_to login_path, alert: "ログインしてください"
     end
+  end
+
+  private
+
+  def add_breadcrumb(label, path = nil)
+    @breadcrumbs << {
+      label: label,
+      path: path
+    }
+  end
+
+  def set_breadcrumbs
+    @breadcrumbs ||= []
+    @breadcrumbs << { label: "Home", path: root_path }
   end
 end
