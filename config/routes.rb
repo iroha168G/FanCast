@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "password_resets/new"
+  get "password_resets/edit"
   get "channels/index"
   get "channels/search"
   get "channels/create"
@@ -12,6 +14,9 @@ Rails.application.routes.draw do
   get    "login",  to: "sessions#new"
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+
+  # パスワード再設定
+  resources :password_resets, only: [:new, :create, :edit, :update]
 
   # チャンネル登録画面
   resources :channels, only: [ :index, :search, :create]
