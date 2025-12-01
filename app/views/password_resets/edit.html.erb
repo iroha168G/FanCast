@@ -1,2 +1,33 @@
-<h1>PasswordResets#edit</h1>
-<p>Find me in app/views/password_resets/edit.html.erb</p>
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">パスワードの再設定</h2>
+
+    <% if flash[:alert] %>
+      <div class="bg-red-100 text-red-800 mb-4 px-4 py-2 rounded shadow-md">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @user, url: password_reset_path(@user.id), method: :patch, local: true) do |f| %>
+      
+      <!-- トークンは hidden で送る -->
+      <%= hidden_field_tag :token, params[:token] %>
+
+      <div class="form-group">
+        <%= f.label :password, "新しいパスワード", class: "form-label" %>
+        <%= f.password_field :password, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "パスワード（確認用）", class: "form-label" %>
+        <%= f.password_field :password_confirmation, class: "form-input" %>
+      </div>
+
+      <%= f.submit "パスワードを更新する", class: "btn-primary" %>
+    <% end %>
+
+    <div class="auth-footer">
+      <%= link_to "ログイン画面へ戻る", login_path, class: "text-blue-600 visited:text-purple-600 hover:underline" %>
+    </div>
+  </div>
+</div>

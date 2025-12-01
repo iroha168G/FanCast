@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   get "channels/create"
   root "contents#index"
 
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+
   # サインアップ
   get "signup", to: "users#new", as: :signup
   resources :users, only: [ :create ]
