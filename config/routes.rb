@@ -20,10 +20,10 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   # パスワード再設定
-  resources :password_resets, only: [:new, :create, :edit, :update]
+  resources :password_resets, only: [ :new, :create, :edit, :update ]
 
   # チャンネル登録画面
-  resources :channels, only: [ :index, :search, :create]
+  resources :channels, only: [ :index, :search, :create ]
 
   # その他（健康チェックやPWA関連）
   get "up" => "rails/health#show", as: :rails_health_check
