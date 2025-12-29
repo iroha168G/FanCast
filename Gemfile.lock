@@ -82,7 +82,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
-    brakeman (7.1.1)
+    brakeman (7.1.2)
       racc
     builder (3.3.0)
     capybara (3.40.0)
@@ -278,6 +278,10 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.0)
+    ransack (4.4.1)
+      activerecord (>= 7.2)
+      activesupport (>= 7.2)
+      i18n
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
@@ -386,7 +390,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
-  brakeman
+  brakeman (~> 7.1.2)
   capybara
   cssbundling-rails
   debug
@@ -399,6 +403,7 @@ DEPENDENCIES
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.2)
+  ransack
   rubocop-rails-omakase
   selenium-webdriver
   sprockets-rails

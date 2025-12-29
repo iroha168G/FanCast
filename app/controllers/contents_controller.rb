@@ -40,7 +40,16 @@ class ContentsController < ApplicationController
         live_viewers: video.live_streaming_details&.concurrent_viewers
       }
     end
+    # 検索バーの文字でチャンネル名、タイトルを部分検索
 
+    if params[:keyword].present?
+      keyword = params[:keyword].downcase
+
+      @videos = @videos.select do |video|
+        video[:title]&.downcase&.include?(keyword) ||
+        video[:channel_title]&.downcase&.include?(keyword)
+      end
+    end
     # ランダムに20件表示
     @videos = @videos.sample(20)
 

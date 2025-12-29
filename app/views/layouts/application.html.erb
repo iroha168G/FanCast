@@ -17,5 +17,20 @@
 
   <body>
     <%= yield %>
+
+    <script>
+      document.addEventListener("click", function (e) {
+        if (!e.target.hasAttribute("data-clear-search")) return;
+
+        const form = e.target.closest("form");
+        if (!form) return;
+
+        form.querySelectorAll("input[type='text']").forEach(input => {
+          input.value = "";
+        });
+
+        form.submit();
+      });
+    </script>
   </body>
 </html>
