@@ -1,0 +1,31 @@
+<form action="#" method="get">
+  <div class="p-2 flex justify-center items-center">
+    <div class="relative">
+      <input
+        type="text"
+        name="keyword"
+        value="<%= params[:keyword] %>"
+        class="w-100 h-10 bg-white border rounded pl-2 pr-2"
+        placeholder="検索ワード"
+      >
+
+      <% if params[:keyword].present? %>
+        <button
+          type="button"
+          data-clear-search
+          class="absolute right-2 top-1/2 -translate-y-1/2
+                 text-gray-400 hover:text-gray-700 text-lg"
+          aria-label="検索をクリア"
+        >
+          ×
+        </button>
+      <% end %>
+    </div>
+
+    <input
+      type="submit"
+      value="検索"
+      class="w-18 h-10 bg-blue-500 text-white py-2 mx-2 rounded"
+    >
+  </div>
+</form>

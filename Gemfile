@@ -65,3 +65,5 @@ gem "google-apis-youtube_v3"
 gem "bcrypt", "~> 3.1.7"
 
 gem "importmap-rails", "~> 2.2"
+
+gem 'ransack'
