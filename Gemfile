@@ -62,7 +62,7 @@ end
 
 gem "google-apis-youtube_v3"
 
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.21"
 
 gem "importmap-rails", "~> 2.2"
 
