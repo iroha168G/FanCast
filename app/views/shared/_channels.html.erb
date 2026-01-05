@@ -4,17 +4,22 @@
       <%= image_tag "yt_icon_red_digital.png", alt: "Youtube", class: "w-8 h-8 -m-0.5" %>
     </div>
     <div class="flex justify-center flex-col space-y-2">
-      <div class="w-30 h-30 rounded-full mx-auto">
-        <%= image_tag "kkrn_icon_user_4.png" %>
-      </div>
-      <div class="mx-auto">
-        チャンネル名
-      </div>
+            <%= link_to channel[:url],
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  class: "text-sm text-center font-medium line-clamp-1 break-words overflow-hidden text-blue-600 visited:text-purple-600 hover:underline" do %>
+        <div class="w-30 h-30 rounded-full mx-auto">
+          <% if channel[:icon].present? %>
+            <img src="<%= channel[:icon] %>" class="w-24 h-24 rounded-full mx-auto">
+          <% end %>
+        </div>
+        <%= channel[:title] %>
+      <% end %>
       <div class="mx-auto">
         チャンネル登録者数
       </div>
       <div class="mx-auto">
-        100,000,000人
+        <%= number_with_delimiter(channel[:subscribers]) %>人
       </div>
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 w-30 rounded-full mx-auto">
         登録

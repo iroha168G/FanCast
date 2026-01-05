@@ -6,7 +6,7 @@
         name="keyword"
         value="<%= params[:keyword] %>"
         class="w-100 h-10 bg-white border rounded pl-2 pr-2"
-        placeholder="検索ワード"
+        placeholder="<%= placeholder || "検索" %>"
       >
 
       <% if params[:keyword].present? %>
