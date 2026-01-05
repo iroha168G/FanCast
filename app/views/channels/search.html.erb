@@ -1,5 +1,49 @@
 <%= render "shared/header" %>
+
 <body class="bg-gray-100">
   <%= render "shared/breadcrumbs" %>
-  <%= render "shared/channels" %>
+    <% if flash[:alert] %>
+    <div class="bg-red-100 text-red-700 p-2 mb-4 rounded">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+  <%= form_with url: channels_search_path, method: :get, local: true do %>
+    <div class="p-2 flex justify-center items-center">
+      <div class="relative">
+        <input
+          type="text"
+          name="keyword"
+          value="<%= params[:keyword] %>"
+          class="w-100 h-10 bg-white border rounded pl-2 pr-2"
+          placeholder="UCから始まるチャンネルIDを入力"
+        >
+
+        <% if params[:keyword].present? %>
+          <button
+            type="button"
+            data-clear-search
+            class="absolute right-2 top-1/2 -translate-y-1/2
+                  text-gray-400 hover:text-gray-700 text-lg"
+            aria-label="検索をクリア"
+          >
+            ×
+          </button>
+        <% end %>
+      </div>
+
+      <input
+        type="submit"
+        value="検索"
+        class="w-18 h-10 bg-blue-500 text-white py-2 mx-2 rounded"
+      >
+    </div>
+  <% end %>
+  <% if @channels.any? %>
+    <% @channels.each do |channel| %>
+      <%= render "shared/channels", channel: channel %>
+    <% end %>
+  <% end %>
+  <% if params[:keyword].present? && flash.now[:alert].blank? && @channels.empty? %>
+    <p class="text-center text-red-700">チャンネルが見つかりません</p>
+  <% end %>
 </body>
