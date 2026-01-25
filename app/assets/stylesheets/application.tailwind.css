@@ -61,3 +61,10 @@
   margin-top: 1rem;
   text-align: center;
 }
+
+@layer utilities {
+  button,
+  input[type="submit"] {
+    background-color: initial !important;
+  }
+}

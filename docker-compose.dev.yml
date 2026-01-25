@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: myapp
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: myapp_development
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_dev_data:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: ./bin/rails server -b 0.0.0.0
+    volumes:
+      - .:/myapp           # ローカルコードをコンテナにマウント
+      - /myapp/node_modules # node_modules はコンテナ内に保持
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      RAILS_ENV: development
+      NODE_ENV: development
+
+volumes:
+  db_dev_data:
