@@ -37,13 +37,22 @@ class ChannelsController < ApplicationController
 
     # Viewで使用する情報
     @channels = response.items.map do |c|
+      db_channel = Channel.find_by(
+        platform: :youtube,
+        channel_identifier: c.id
+      )
+
+      favorite = current_user.user_favorite_channels
+        .find_by(channel_id: db_channel.id) if db_channel
       {
         channel_id: c.id,
         title: c.snippet.title,
         description: c.snippet.description,
         icon: c.snippet.thumbnails&.medium&.url,
         subscribers: c.statistics.hidden_subscriber_count ? nil : c.statistics.subscriber_count.to_i,
-        url: "https://www.youtube.com/channel/#{c.id}"
+        url: "https://www.youtube.com/channel/#{c.id}",
+        db_id: db_channel&.id,
+        favorite_id: favorite&.id
       }
     end
   end

@@ -65,4 +65,9 @@ class User < ApplicationRecord
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end
+
+  has_many :user_favorite_channels, dependent: :destroy
+  has_many :favorite_channels,
+           through: :user_favorite_channels,
+           source: :channel
 end

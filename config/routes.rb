@@ -23,7 +23,11 @@ Rails.application.routes.draw do
   resources :password_resets, only: [ :new, :create, :edit, :update ]
 
   # チャンネル登録画面
-  resources :channels, only: [ :index, :search, :create ]
+  resources :channels, only: [ :index, :search, :create]
+  
+  # チャンネル登録、削除
+  resources :user_favorite_channels, only: [:create, :destroy]
+  delete "user_favorite_channels", to: "user_favorite_channels#destroy"
 
   # その他（健康チェックやPWA関連）
   get "up" => "rails/health#show", as: :rails_health_check

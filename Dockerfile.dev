@@ -23,5 +23,9 @@ WORKDIR /myapp
 # Bundlerのインストール
 RUN gem install bundler
 
+# Gemfile をコピーして bundle install
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
 # アプリケーションのコードをコピー
 COPY . /myapp

@@ -10,9 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_30_093830) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_18_233526) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "channels", force: :cascade do |t|
+    t.integer "platform", null: false
+    t.string "name", null: false
+    t.string "channel_identifier", null: false
+    t.string "thumbnail_url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["platform", "channel_identifier"], name: "index_channels_on_platform_and_channel_identifier", unique: true
+  end
+
+  create_table "user_favorite_channels", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "channel_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_user_favorite_channels_on_channel_id"
+    t.index ["user_id", "channel_id"], name: "index_user_favorite_channels_on_user_id_and_channel_id", unique: true
+    t.index ["user_id"], name: "index_user_favorite_channels_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -24,4 +44,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_30_093830) do
     t.datetime "reset_sent_at"
     t.boolean "activated"
   end
+
+  add_foreign_key "user_favorite_channels", "channels"
+  add_foreign_key "user_favorite_channels", "users"
 end
