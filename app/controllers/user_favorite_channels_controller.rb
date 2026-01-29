@@ -21,7 +21,7 @@ class UserFavoriteChannelsController < ApplicationController
   def destroy
     favorite = current_user.user_favorite_channels.find(params[:id])
     favorite.destroy
-    
+
     redirect_back fallback_location: root_path
   end
 end

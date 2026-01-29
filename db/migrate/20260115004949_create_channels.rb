@@ -8,6 +8,6 @@ class CreateChannels < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :channels, [:platform, :channel_identifier], unique: true
+    add_index :channels, [ :platform, :channel_identifier ], unique: true
   end
 end
