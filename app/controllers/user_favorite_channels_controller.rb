@@ -2,13 +2,17 @@ class UserFavoriteChannelsController < ApplicationController
   before_action :require_login
 
   def create
-    channel = Channel.find_or_create_by!(
+    channel = Channel.find_or_initialize_by(
       platform: :youtube,
       channel_identifier: params[:channel_identifier]
-    ) do |ch|
-      ch.name = params[:name]
-      ch.thumbnail_url = params[:thumbnail_url]
-    end
+    ) 
+    
+    # 毎回最新情報を代入
+    channel.name = params[:name]
+    channel.thumbnail_url = params[:thumbnail_url]
+    
+    # 差分があれば更新
+    channel.save! if channel.changed?
 
     UserFavoriteChannel.find_or_create_by!(
       user: current_user,

@@ -7,13 +7,13 @@ class ContentsController < ApplicationController
     youtube = Rails.application.config.youtube_service
 
     fetcher = Youtube::ChannelLiveFetcher.new(youtube_service: youtube)
-
+    
     # ユーザーのお気に入り登録してるチャンネル一覧を取得
     favorites = current_user
       .user_favorite_channels
       .includes(:channel)
 
-    # チャンネル動画を取得
+    # 動画を取得
     @videos = favorites.flat_map do |favorite|
       fetcher.fetch(favorite.channel.channel_identifier)
     end
@@ -27,21 +27,14 @@ class ContentsController < ApplicationController
       id: channel_ids.join(",")
     )
 
-    channel_icons = channel_response.items.index_by(&:id).transform_values do |c|
+    items = channel_response.items || []
+
+    channel_icons = items.index_by(&:id).transform_values do |c|
       c.snippet.thumbnails&.default&.url
     end
 
-    @videos = normalize_videos(@videos, channel_icons)
+    @videos = normalize_videos(@videos,channel_icons)
 
-    # 検索バーの文字でチャンネル名、タイトルを部分検索
-    if params[:keyword].present?
-      keyword = params[:keyword].downcase
-
-      @videos = @videos.select do |video|
-        video[:title]&.downcase&.include?(keyword) ||
-        video[:channel_title]&.downcase&.include?(keyword)
-      end
-    end
   end
 
   private
@@ -57,7 +50,7 @@ class ContentsController < ApplicationController
         q: "作業用BGM",
         max_results: 50
       )
-
+      
       video_ids = search_response.items.map { |v| v.id.video_id }.join(",")
 
       # 動画の詳細情報を取得
@@ -86,8 +79,8 @@ class ContentsController < ApplicationController
         live_viewers: video.live_streaming_details&.concurrent_viewers
       }
     end
-
     # 検索バーの文字でチャンネル名、タイトルを部分検索
+
     if params[:keyword].present?
       keyword = params[:keyword].downcase
 
