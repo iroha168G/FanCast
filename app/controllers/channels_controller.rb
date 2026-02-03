@@ -6,6 +6,21 @@ class ChannelsController < ApplicationController
     # パンくず
     add_breadcrumb("お気に入りのチャンネル一覧")
     @channels = []
+
+    favorites = current_user.user_favorite_channels.includes(:channel)
+
+    @channels = favorites.map do |favorite|
+      channel = favorite.channel
+
+      {
+        id: channel.id,
+        name: channel.name,
+        thumbnail_url: channel.thumbnail_url,
+        favorite_id: favorite.id,
+        channel_identifier: channel.channel_identifier,
+        platform: channel.platform
+      }
+    end
   end
 
   def search

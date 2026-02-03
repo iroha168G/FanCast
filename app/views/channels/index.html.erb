@@ -1,4 +1,95 @@
 <%= render "shared/header" %>
+
 <body class="bg-gray-100">
   <%= render "shared/breadcrumbs" %>
+    <% if flash[:alert] %>
+    <div class="bg-red-100 text-red-700 p-2 mb-4 rounded">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+  <%= form_with url: channels_search_path, method: :get, local: true do %>
+    <div class="p-2 flex justify-center items-center">
+      <div class="relative">
+        <input
+          type="text"
+          name="keyword"
+          value="<%= params[:keyword] %>"
+          class="w-100 h-10 bg-white border rounded pl-2 pr-2"
+          placeholder="チャンネル名を入力"
+        >
+
+        <% if params[:keyword].present? %>
+          <button
+            type="button"
+            data-clear-search
+            class="absolute right-2 top-1/2 -translate-y-1/2
+                  text-gray-400 hover:text-gray-700 text-lg"
+            aria-label="検索をクリア"
+          >
+            ×
+          </button>
+        <% end %>
+      </div>
+
+      <input
+        type="submit"
+        value="検索"
+        class="w-18 h-10 bg-blue-500 text-white py-2 mx-2 rounded"
+      >
+    </div>
+  <% end %>
+
+  <% if @channels.any? %>
+    <div class="grid gap-4 justify-center box-border grid-cols-[repeat(auto-fit,minmax(260px,1fr))] p-10 mx-auto max-w-screen-xl">
+      <% @channels.each do |channel| %>
+        <div class="shadow-md rounded bg-white w-70 h-80 overflow-hidden">
+          <%= image_tag "yt_icon_red_digital.png",
+                alt: "Youtube",
+                class: "w-8 h-8 -m-0.5" %>
+
+          <div class="flex flex-col items-center space-y-2 px-2 min-w-0">
+
+            <%= link_to "https://www.youtube.com/channel/#{channel[:channel_identifier]}",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                class: "w-full min-w-0 text-sm text-center font-medium line-clamp-1 break-words overflow-hidden text-blue-600 visited:text-purple-600 hover:underline" do %>
+              <div class="w-32 h-32 rounded-full mx-auto">
+                <% if channel[:thumbnail_url].present? %>
+                  <img src="<%= channel[:thumbnail_url] %>" class="w-24 h-24 rounded-full mx-auto">
+                <% end %>
+                  <%= channel[:name] %>
+              </div>
+            <% end %>
+            <% if channel[:favorite_id].present? %>
+              <%= form_with url: user_favorite_channel_path(channel[:favorite_id]),
+                            method: :delete,
+                            class: "w-full flex justify-center" do %>
+                <%= button_tag "登録解除",
+                  type: "submit",
+                  style: "background-color: #64748b; width:8rem;",
+                  class: "inline-flex justify-center items-center text-white font-bold py-3 rounded-full hover:opacity-90" %>
+              <% end %>
+            <% else %>
+              <%= form_with url: user_favorite_channels_path(
+                              platform: channel[:platform],
+                              channel_identifier: channel[:channel_id],
+                              name: channel[:title],
+                              thumbnail_url: channel[:icon]
+                            ),
+                            method: :post,
+                            class: "w-full flex justify-center" do %>
+                <%= button_tag "登録",
+                      type: "submit",
+                      style: "background-color: #2563eb; width:8rem;",
+                      class: "inline-flex justify-center items-center text-white font-bold py-3 rounded-full hover:opacity-90"  %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if params[:keyword].present? && flash.now[:alert].blank? && @channels.empty? %>
+    <p class="text-center text-red-700">チャンネルが見つかりません</p>
+  <% end %>
 </body>
