@@ -5,12 +5,12 @@ class UserFavoriteChannelsController < ApplicationController
     channel = Channel.find_or_initialize_by(
       platform: :youtube,
       channel_identifier: params[:channel_identifier]
-    ) 
-    
+    )
+
     # 毎回最新情報を代入
     channel.name = params[:name]
     channel.thumbnail_url = params[:thumbnail_url]
-    
+
     # 差分があれば更新
     channel.save! if channel.changed?
 

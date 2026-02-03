@@ -7,7 +7,7 @@ class ContentsController < ApplicationController
     youtube = Rails.application.config.youtube_service
 
     fetcher = Youtube::ChannelLiveFetcher.new(youtube_service: youtube)
-    
+
     # ユーザーのお気に入り登録してるチャンネル一覧を取得
     favorites = current_user
       .user_favorite_channels
@@ -33,8 +33,7 @@ class ContentsController < ApplicationController
       c.snippet.thumbnails&.default&.url
     end
 
-    @videos = normalize_videos(@videos,channel_icons)
-
+    @videos = normalize_videos(@videos, channel_icons)
   end
 
   private
@@ -50,7 +49,7 @@ class ContentsController < ApplicationController
         q: "作業用BGM",
         max_results: 50
       )
-      
+
       video_ids = search_response.items.map { |v| v.id.video_id }.join(",")
 
       # 動画の詳細情報を取得
