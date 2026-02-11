@@ -1,47 +1,78 @@
 class ContentsController < ApplicationController
   def index
-    # ログインしてるかチェック
-    return guest_index unless current_user
+    status = params[:status].presence || "live"
 
-    # Youtube APIを使えるようにする
-    youtube = Rails.application.config.youtube_service
+    if current_user
+      videos = fetch_login_videos(status)
 
-    fetcher = Youtube::ChannelLiveFetcher.new(youtube_service: youtube)
+      if searching_keyword?
+        @videos = filter_by_keyword(videos)
+      else
+        @videos = videos
+      end
 
-    # ユーザーのお気に入り登録してるチャンネル一覧を取得
-    favorites = current_user
-      .user_favorite_channels
-      .includes(:channel)
-
-    # 動画を取得
-    @videos = favorites.flat_map do |favorite|
-      fetcher.fetch(favorite.channel.channel_identifier)
+      return
     end
 
-    # チャンネルIDをまとめて取得
-    channel_ids = @videos.map { |v| v.snippet.channel_id }.uniq
-
-    # アイコンを取得
-    channel_response = youtube.list_channels(
-      "snippet",
-      id: channel_ids.join(",")
-    )
-
-    items = channel_response.items || []
-
-    channel_icons = items.index_by(&:id).transform_values do |c|
-      c.snippet.thumbnails&.default&.url
-    end
-
-    @videos = normalize_videos(@videos, channel_icons)
+    # 未ログインは従来どおりランダム
+    base_videos = fetch_guest_live_videos_cached
+    @videos = base_videos.sample(20)
   end
 
   private
 
-  def guest_index
+  # =====================================
+  # ログインユーザー
+  # =====================================
+  def fetch_login_videos(status)
     youtube = Rails.application.config.youtube_service
-    live_videos = Rails.cache.fetch("live_videos", expires_in: 60.minutes) do
-      # 配信中の動画を検索
+    fetcher = Youtube::ChannelVideosFetcher.new(youtube_service: youtube)
+
+    videos =
+      current_user.user_favorite_channels.includes(:channel).flat_map do |favorite|
+        fetcher.fetch(
+          favorite.channel.channel_identifier,
+          status
+        )
+      end
+
+    channel_icons =
+      fetch_channel_icons(
+        youtube,
+        videos.map { |v| v.snippet.channel_id }
+      )
+
+    normalize_videos_by_status(videos, channel_icons, status)
+  rescue Google::Apis::ClientError => e
+    Rails.logger.warn("YouTube quota exceeded (login): #{e.message}")
+    []
+  end
+
+  def filter_by_keyword(videos)
+    keyword = params[:keyword].to_s.downcase
+
+    videos.select do |video|
+      video[:title]&.downcase&.include?(keyword) ||
+        video[:channel_title]&.downcase&.include?(keyword)
+    end
+  end
+
+  def searching_keyword?
+    params[:keyword].present? &&
+      params[:keyword].strip != ""
+  end
+
+  # =====================================
+  # 未ログインユーザー（liveのみ）
+  # =====================================
+  def fetch_guest_live_videos_cached
+    fetch_guest_live_videos_base
+  end
+
+  def fetch_guest_live_videos_base
+    Rails.cache.fetch("guest:live:videos:base:v1", expires_in: 30.minutes) do
+      youtube = Rails.application.config.youtube_service
+
       search_response = youtube.list_searches(
         "snippet",
         event_type: "live",
@@ -50,51 +81,57 @@ class ContentsController < ApplicationController
         max_results: 50
       )
 
-      video_ids = search_response.items.map { |v| v.id.video_id }.join(",")
+      video_ids = search_response.items.map { |v| v.id.video_id }
+      next [] if video_ids.empty?
 
-      # 動画の詳細情報を取得
-      youtube.list_videos("snippet,liveStreamingDetails", id: video_ids).items
+      videos =
+        youtube.list_videos(
+          "snippet,liveStreamingDetails",
+          id: video_ids.join(",")
+        ).items
+
+      channel_icons =
+        fetch_channel_icons(
+          youtube,
+          videos.map { |v| v.snippet.channel_id }
+        )
+
+      normalize_videos(videos, channel_icons)
     end
-
-    # まとめてチャンネルIDを取得
-    channel_ids = live_videos.map { |v| v.snippet.channel_id }.uniq
-
-    # チャンネル情報取得
-    channel_response = youtube.list_channels("snippet", id: channel_ids.join(","))
-    channel_icons = channel_response.items.index_by(&:id).transform_values do |c|
-      c.snippet.thumbnails&.default&.url
-    end
-
-    # 動画 + チャンネルアイコンを紐付け
-    @videos = live_videos.map do |video|
-      {
-        title: video.snippet.title,
-        video_id: video.id,
-        video_thumbnail: video.snippet.thumbnails&.high&.url,
-        channel_title: video.snippet.channel_title,
-        channel_id: video.snippet.channel_id,
-        channel_icon: channel_icons[video.snippet.channel_id],
-        live_starttime: video.live_streaming_details&.actual_start_time,
-        live_viewers: video.live_streaming_details&.concurrent_viewers
-      }
-    end
-    # 検索バーの文字でチャンネル名、タイトルを部分検索
-
-    if params[:keyword].present?
-      keyword = params[:keyword].downcase
-
-      @videos = @videos.select do |video|
-        video[:title]&.downcase&.include?(keyword) ||
-        video[:channel_title]&.downcase&.include?(keyword)
-      end
-    end
-    # ランダムに20件表示
-    @videos = @videos.sample(20)
-
-    # 日付順に並べ替え（昇順: 古い順 / 降順: 新しい順）
-    @videos = @videos.sort_by { |video| video[:live_starttime] }.reverse
+  rescue Google::Apis::ClientError => e
+    Rails.logger.warn("YouTube API error (guest videos): #{e.message}")
+    []
   end
 
+  # =====================================
+  # チャンネルアイコン取得（キャッシュ付き）
+  # =====================================
+  def fetch_channel_icons(youtube, channel_ids)
+    return {} if channel_ids.blank?
+
+    channel_ids.uniq.each_with_object({}) do |channel_id, icons|
+      icons[channel_id] =
+        Rails.cache.fetch(
+          "youtube:channel:icon:#{channel_id}",
+          expires_in: 12.hours
+        ) do
+          response =
+            youtube.list_channels(
+              "snippet",
+              id: channel_id
+            )
+
+          response.items.first&.snippet&.thumbnails&.default&.url
+        end
+    end
+  rescue Google::Apis::ClientError => e
+    Rails.logger.warn("YouTube API error (icons): #{e.message}")
+    {}
+  end
+
+  # =====================================
+  # 共通処理
+  # =====================================
   def normalize_videos(videos, channel_icons)
     videos.map do |video|
       {
@@ -105,10 +142,30 @@ class ContentsController < ApplicationController
         channel_id: video.snippet.channel_id,
         channel_icon: channel_icons[video.snippet.channel_id],
         live_starttime: video.live_streaming_details&.actual_start_time,
+        scheduled_starttime: video.live_streaming_details&.scheduled_start_time,
         live_viewers: video.live_streaming_details&.concurrent_viewers
       }
     end
-      .sort_by { |v| v[:live_starttime] }
-      .reverse
+  end
+
+  def normalize_videos_by_status(videos, channel_icons, status)
+    normalized = normalize_videos(videos, channel_icons)
+
+    case status
+    when "upcoming"
+      normalized
+        .select { |v| v[:scheduled_starttime].present? }
+        .sort_by { |v| v[:scheduled_starttime] }
+    when "archive"
+      normalized
+        .select { |v| v[:live_starttime].present? }
+        .sort_by { |v| v[:live_starttime] }
+        .reverse
+    else # live
+      normalized
+        .select { |v| v[:live_starttime].present? }
+        .sort_by { |v| v[:live_starttime] }
+        .reverse
+    end
   end
 end

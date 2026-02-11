@@ -1,5 +1,8 @@
 <%= render "shared/header" %>
-<%= render "shared/search", placeholder: "検索ワード" %>
+<% if current_user %>
+  <%= render "shared/search", placeholder: "検索ワード" %>
+  <%= render "shared/tabs" %>
+<% end %>
 <body class="bg-gray-100">
   <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-content-center p-10 mx-auto max-w-screen-xl">
     <% @videos.each do |video| %>
@@ -9,6 +12,8 @@
           <%= image_tag "yt_icon_red_digital.png", alt: "Youtube", class: "w-8 h-8 -m-0.5" %>
           <% if video[:live_starttime].present? %>
             <p class="text m-1"><%= video[:live_starttime].strftime("%Y/%m/%d %H:%M") %></p>
+          <% elsif video[:scheduled_starttime].present? %>
+            <p class="text m-1"><%= video[:scheduled_starttime].strftime("%Y/%m/%d %H:%M") %></p>
           <% end %>
         </div>
         <%= link_to "https://www.youtube.com/watch?v=#{video[:video_id]}", class: "block  text-blue-600 visited:text-purple-600 hover:underline", target: "_blank", rel: "noopener noreferrer" do %>

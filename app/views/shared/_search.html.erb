@@ -1,4 +1,5 @@
-<form action="#" method="get">
+<form action="<%= root_path %>" method="get">
+  <%= hidden_field_tag :status, params[:status] %>
   <div class="p-2 flex justify-center items-center">
     <div class="relative">
       <input
@@ -12,7 +13,7 @@
       <% if params[:keyword].present? %>
         <button
           type="button"
-          data-clear-search
+          onclick="window.location.href='/'"
           class="absolute right-2 top-1/2 -translate-y-1/2
                  text-gray-400 hover:text-gray-700 text-lg"
           aria-label="検索をクリア"

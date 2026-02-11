@@ -21,6 +21,8 @@ class ChannelsController < ApplicationController
         platform: channel.platform
       }
     end
+
+    apply_keyword_filter!
   end
 
   def search
@@ -70,8 +72,25 @@ class ChannelsController < ApplicationController
         favorite_id: favorite&.id
       }
     end
+
+  rescue Google::Apis::ClientError => e
+    Rails.logger.warn("YouTube API error: #{e.message}")
+    # ユーザーには「ヒットなし」に見せる
+    @channels = []
   end
 
   def create
+  end
+
+  private
+
+  def apply_keyword_filter!
+    return unless params[:keyword].present?
+
+    keyword = params[:keyword].downcase
+
+    @channels.select! do |channel|
+      channel[:name]&.downcase&.include?(keyword)
+    end
   end
 end
