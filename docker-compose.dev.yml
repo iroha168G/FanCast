@@ -18,8 +18,9 @@ services:
       dockerfile: Dockerfile.dev
     command: ./bin/rails server -b 0.0.0.0
     volumes:
-      - .:/myapp           # ローカルコードをコンテナにマウント
-      - /myapp/node_modules # node_modules はコンテナ内に保持
+      - .:/myapp                    # ローカルコードをコンテナにマウント
+      - /myapp/node_modules         # node_modules はコンテナ内に保持
+      - bundle:/usr/local/bundle    # Ruby gems を永続化（← 追加）
     ports:
       - "3000:3000"
     depends_on:
@@ -32,3 +33,4 @@ services:
 
 volumes:
   db_dev_data:
+  bundle:

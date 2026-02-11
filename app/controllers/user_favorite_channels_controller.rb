@@ -14,18 +14,34 @@ class UserFavoriteChannelsController < ApplicationController
     # 差分があれば更新
     channel.save! if channel.changed?
 
-    UserFavoriteChannel.find_or_create_by!(
-      user: current_user,
-      channel: channel
-    )
+    favorite =
+      UserFavoriteChannel.find_or_create_by!(
+        user: current_user,
+        channel: channel
+      )
+
+    # チャンネル単位キャッシュ削除（status別）
+    delete_channel_video_caches(channel.channel_identifier)
 
     redirect_to channels_search_path(keyword: params[:channel_identifier])
   end
 
   def destroy
     favorite = current_user.user_favorite_channels.find(params[:id])
-    favorite.destroy
 
+    delete_channel_video_caches(favorite.channel.channel_identifier)
+
+    favorite.destroy
     redirect_back fallback_location: root_path
+  end
+
+  private
+
+  def delete_channel_video_caches(channel_identifier)
+    %w[live upcoming archive].each do |status|
+      Rails.cache.delete(
+        "youtube:channel:videos:#{status}:#{channel_identifier}"
+      )
+    end
   end
 end

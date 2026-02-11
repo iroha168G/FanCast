@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../views/shared/_tabs.html.erb";
 
 .auth-container {
   display: flex;
@@ -60,11 +61,4 @@
 .auth-footer {
   margin-top: 1rem;
   text-align: center;
-}
-
-@layer utilities {
-  button,
-  input[type="submit"] {
-    background-color: initial !important;
-  }
 }

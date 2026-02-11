@@ -1,0 +1,11 @@
+<ul class="flex gap-4 p-4 justify-center items-center">
+  <li>
+    <%= link_to "配信中", root_path(status: "live"), class: tab_class("live") %>
+  </li>
+  <li>
+    <%= link_to "配信予定", root_path(status: "upcoming"), class: tab_class("upcoming") %>
+  </li>
+  <li>
+    <%= link_to "アーカイブ", root_path(status: "archive"), class: tab_class("archive") %>
+  </li>
+</ul>
