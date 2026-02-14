@@ -18,12 +18,19 @@
         </div>
         <%= link_to "https://www.youtube.com/watch?v=#{video[:video_id]}", class: "block  text-blue-600 visited:text-purple-600 hover:underline", target: "_blank", rel: "noopener noreferrer" do %>
           <!-- 動画サムネイル -->
-          <div class="w-full aspect-[16/9] p-1">
-            <img src="<%= video[:video_thumbnail] %>"
-                 alt="<%= video[:title] %>"
-                 class="w-full h-full rounded object-cover"
-            >
-          </div>
+            <div class="relative overflow-hidden rounded aspect-[16/9]">
+              <img src="<%= video[:video_thumbnail] %>",
+                    alt="<%= video[:title] %>",
+                    class="absolute inset-0 w-full h-full object-cover"
+              >
+              <div class="absolute right-2 bg-black/80 text-white text-xs px-2 py-1 my-2 rounded pointer-events-none"
+                   style="background-color: rgba(0,0,0,0.5);"
+              >
+                <%= format_duration(video[:archive_duration]) %>
+              </div>
+            </div>
+
+
           <!-- 動画タイトル -->
             <p class="px-2 text-sm font-medium line-clamp-2 break-words overflow-hidden"><%= video[:title] %></p>
         <% end %>

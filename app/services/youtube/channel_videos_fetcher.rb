@@ -56,7 +56,7 @@ module Youtube
 
       @youtube
         .list_videos(
-          "snippet,liveStreamingDetails",
+          "snippet,contentDetails,liveStreamingDetails",
           id: ids.join(",")
         )
         .items
