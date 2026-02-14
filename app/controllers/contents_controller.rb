@@ -143,6 +143,7 @@ class ContentsController < ApplicationController
         channel_icon: channel_icons[video.snippet.channel_id],
         live_starttime: video.live_streaming_details&.actual_start_time,
         scheduled_starttime: video.live_streaming_details&.scheduled_start_time,
+        archive_duration: video.content_details&.duration,
         live_viewers: video.live_streaming_details&.concurrent_viewers
       }
     end
@@ -158,7 +159,10 @@ class ContentsController < ApplicationController
         .sort_by { |v| v[:scheduled_starttime] }
     when "archive"
       normalized
-        .select { |v| v[:live_starttime].present? }
+        .select do |v|
+          v[:archive_duration].present? &&
+            v[:live_starttime].present?
+        end
         .sort_by { |v| v[:live_starttime] }
         .reverse
     else # live
