@@ -1,11 +1,13 @@
-<%= render "shared/header" %>
+<% content_for :header do %>
+  <%= render "shared/header" %>
+<% end %>
 
 <body class="bg-gray-100">
-  <%= render "shared/breadcrumbs" %>
-    <% if flash[:alert] %>
-    <div class="bg-red-100 text-red-700 p-2 mb-4 rounded">
-      <%= flash[:alert] %>
-    </div>
+  <% content_for :breadcrumbs do %>
+    <%= render "shared/breadcrumbs" %>
+  <% end %>
+  <% content_for :flash do %>
+    <%= render "shared/flash" %>
   <% end %>
   <%= form_with url: channels_index_path, method: :get, local: true do %>
     <div class="p-2 flex justify-center items-center">
