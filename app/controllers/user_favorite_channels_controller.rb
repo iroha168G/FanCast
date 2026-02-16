@@ -23,7 +23,8 @@ class UserFavoriteChannelsController < ApplicationController
     # チャンネル単位キャッシュ削除（status別）
     delete_channel_video_caches(channel.channel_identifier)
 
-    redirect_to channels_search_path(keyword: params[:channel_identifier])
+    redirect_to channels_search_path(keyword: params[:channel_identifier]),
+                notice: "チャンネルを登録しました。"
   end
 
   def destroy
@@ -32,7 +33,7 @@ class UserFavoriteChannelsController < ApplicationController
     delete_channel_video_caches(favorite.channel.channel_identifier)
 
     favorite.destroy
-    redirect_back fallback_location: root_path
+    redirect_back fallback_location: root_path, notice: "チャンネルの登録を解除しました。"
   end
 
   private

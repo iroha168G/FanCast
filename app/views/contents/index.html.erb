@@ -1,4 +1,11 @@
-<%= render "shared/header" %>
+<% content_for :header do %>
+  <div class="mb-4">
+    <%= render "shared/header" %>
+  </div>
+<% end %>
+<% content_for :flash do %>
+  <%= render "shared/flash" %>
+<% end %>
 <% if current_user %>
   <%= render "shared/search", placeholder: "検索ワード" %>
   <%= render "shared/tabs" %>

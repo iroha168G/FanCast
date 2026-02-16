@@ -37,7 +37,7 @@ class ChannelsController < ApplicationController
     # Youtube ID形式チェック
     # UC + 英数字/ハイフン/アンダースコア（24文字以上）
     unless channel_id.match?(/\AUC[a-zA-Z0-9_-]{22}\z/)
-      flash.now[:alert] = "チャンネルIDの形式が正しくありません"
+      flash.now[:alert] = "チャンネルIDの形式が正しくありません。"
       return
     end
 
