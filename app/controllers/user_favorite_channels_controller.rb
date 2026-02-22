@@ -2,6 +2,14 @@ class UserFavoriteChannelsController < ApplicationController
   before_action :require_login
 
   def create
+    if current_user.mock?
+      redirect_back(
+        fallback_location: channels_search_path(keyword: params[:channel_identifier]),
+        notice: "demo チャンネルを登録しました。"
+        )
+      return
+    end
+
     channel = Channel.find_or_initialize_by(
       platform: :youtube,
       channel_identifier: params[:channel_identifier]
@@ -28,6 +36,14 @@ class UserFavoriteChannelsController < ApplicationController
   end
 
   def destroy
+    if current_user.mock?
+      redirect_back(
+        fallback_location: root_path,
+        notice: "（デモ）チャンネルの登録を解除しました。"
+      )
+      return
+    end
+
     favorite = current_user.user_favorite_channels.find(params[:id])
 
     delete_channel_video_caches(favorite.channel.channel_identifier)

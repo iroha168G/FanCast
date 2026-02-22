@@ -43,9 +43,10 @@
         <% end %>
         <!-- チャンネル情報 -->
         <div class="p-2 text-sm flex items-center gap-2">
-          <img src="<%= video[:channel_icon] %>" 
-               alt="<%= video[:channel_title] %>" 
-               class="w-10 h-10 rounded-full">
+          <img src="<%= video[:channel_icon].presence || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png' %>"
+               alt="<%= video[:channel_title] %>"
+               class="w-10 h-10 rounded-full object-cover bg-gray-200"
+               onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';">
           <div class="flex-col">
             <%= link_to video[:channel_title], "https://www.youtube.com/channel/#{video[:channel_id]}",
                         target: "_blank",
@@ -59,4 +60,7 @@
       </div>
     <% end %>
   </div>
+  <% if params[:keyword].present? && flash.now[:alert].blank? && @videos.empty? %>
+    <p class="text-center text-red-700">コンテンツが見つかりません。</p>
+  <% end %>
 </body>

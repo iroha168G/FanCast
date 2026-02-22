@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_31_091456) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_18_013951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_31_091456) do
     t.string "reset_digest"
     t.datetime "reset_sent_at"
     t.boolean "activated"
+    t.boolean "mock_user", default: false, null: false
   end
 
   add_foreign_key "user_favorite_channels", "channels"

@@ -41,9 +41,7 @@
     </div>
   <% end %>
   <% if @channels.any? %>
-    <% @channels.each do |channel| %>
-      <%= render "shared/channels", channel: channel %>
-    <% end %>
+    <%= render "shared/channels" %>
   <% end %>
   <% if params[:keyword].present? && flash.now[:alert].blank? && @channels.empty? %>
     <p class="text-center text-red-700">チャンネルが見つかりません</p>

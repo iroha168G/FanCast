@@ -1,53 +1,55 @@
 <div class="grid gap-4 justify-center box-border grid-cols-[repeat(auto-fit,minmax(260px,1fr))] p-10 mx-auto max-w-screen-xl">
-  <div class="shadow-md rounded bg-white w-70 h-80 overflow-hidden">
-    <div>
-      <%= image_tag "yt_icon_red_digital.png",
-            alt: "Youtube",
-            class: "w-8 h-8 -m-0.5" %>
-    </div>
+  <% @channels.each do |channel| %>
+    <div class="shadow-md rounded bg-white w-70 h-80 overflow-hidden">
+      <div>
+        <%= image_tag "yt_icon_red_digital.png",
+              alt: "Youtube",
+              class: "w-8 h-8 -m-0.5" %>
+      </div>
 
-    <div class="flex flex-col items-center space-y-2">
-      <%= link_to channel[:url],
-            target: "_blank",
-            rel: "noopener noreferrer",
-            class: "text-sm text-center font-medium line-clamp-1 break-words overflow-hidden text-blue-600 visited:text-purple-600 hover:underline" do %>
+      <div class="flex flex-col items-center space-y-2">
+        <%= link_to channel[:url],
+              target: "_blank",
+              rel: "noopener noreferrer",
+              class: "text-sm text-center font-medium line-clamp-1 break-words overflow-hidden text-blue-600 visited:text-purple-600 hover:underline" do %>
 
-        <div class="w-32 h-32 rounded-full mx-auto">
-          <% if channel[:icon].present? %>
-            <img src="<%= channel[:icon] %>" class="w-24 h-24 rounded-full mx-auto">
+          <div class="w-32 h-32 rounded-full mx-auto">
+            <% if channel[:icon].present? %>
+              <img src="<%= channel[:icon] %>" class="w-24 h-24 rounded-full mx-auto">
+            <% end %>
+          </div>
+
+          <%= channel[:title] %>
+        <% end %>
+
+        <div>チャンネル登録者数</div>
+        <div><%= number_with_delimiter(channel[:subscribers]) %>人</div>
+
+        <% if channel[:favorite_id].present? %>
+          <%= form_with url: user_favorite_channel_path(channel[:favorite_id]),
+                        method: :delete,
+                        class: "w-full flex justify-center" do %>
+            <%= button_tag "登録解除",
+                  type: "submit",
+                  style: "background-color: #64748b; width:8rem;",
+                  class: "inline-flex justify-center items-center text-white font-bold py-3 rounded-full hover:opacity-90" %>
           <% end %>
-        </div>
-
-        <%= channel[:title] %>
-      <% end %>
-
-      <div>チャンネル登録者数</div>
-      <div><%= number_with_delimiter(channel[:subscribers]) %>人</div>
-
-      <% if channel[:favorite_id].present? %>
-        <%= form_with url: user_favorite_channel_path(channel[:favorite_id]),
-                      method: :delete,
-                      class: "w-full flex justify-center" do %>
-          <%= button_tag "登録解除",
-                type: "submit",
-                style: "background-color: #64748b; width:8rem;",
-                class: "inline-flex justify-center items-center text-white font-bold py-3 rounded-full hover:opacity-90" %>
+        <% else %>
+          <%= form_with url: user_favorite_channels_path(
+                          platform: channel[:platform],
+                          channel_identifier: channel[:channel_id],
+                          name: channel[:title],
+                          thumbnail_url: channel[:icon]
+                        ),
+                        method: :post,
+                        class: "w-full flex justify-center" do %>
+            <%= button_tag "登録",
+                  type: "submit",
+                  style: "background-color: #2563eb; width:8rem;",
+                  class: "inline-flex justify-center items-center text-white font-bold py-3 rounded-full hover:opacity-90"  %>
+          <% end %>
         <% end %>
-      <% else %>
-        <%= form_with url: user_favorite_channels_path(
-                        platform: channel[:platform],
-                        channel_identifier: channel[:channel_id],
-                        name: channel[:title],
-                        thumbnail_url: channel[:icon]
-                      ),
-                      method: :post,
-                      class: "w-full flex justify-center" do %>
-          <%= button_tag "登録",
-                type: "submit",
-                style: "background-color: #2563eb; width:8rem;",
-                class: "inline-flex justify-center items-center text-white font-bold py-3 rounded-full hover:opacity-90"  %>
-        <% end %>
-      <% end %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>

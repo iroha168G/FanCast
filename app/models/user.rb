@@ -21,6 +21,18 @@ class User < ApplicationRecord
   # 保存前にメールを小文字化
   before_save { self.email = email.downcase }
 
+  def mock?
+    mock_user
+  end
+
+  def favorite_channels_for_view
+    if mock?
+      Youtube::Mock::FavoriteChannels.new.all
+    else
+      favorite_channels
+    end
+  end
+
   # ==============================
   # パスワードリセット関連
   # ==============================
