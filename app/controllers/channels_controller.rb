@@ -5,6 +5,22 @@ class ChannelsController < ApplicationController
   def index
     # パンくず
     add_breadcrumb("お気に入りのチャンネル一覧")
+
+    if current_user&.mock?
+      keyword = params[:keyword].to_s
+
+      @channels = 
+        Youtube::Mock::FavoriteChannels
+          .new
+          .all
+          .select do |ch|
+            keyword.blank? ||
+              ch[:channel_id].include?(keyword) ||
+              ch[:title].downcase.include?(keyword.downcase)
+          end
+      return
+    end
+
     @channels = []
 
     favorites = current_user.user_favorite_channels.includes(:channel)
@@ -28,6 +44,22 @@ class ChannelsController < ApplicationController
   def search
     # パンくず
     add_breadcrumb("チャンネルを探す")
+
+    if current_user&.mock?
+      keyword = params[:keyword].to_s
+
+      @channels = 
+        Youtube::Mock::FavoriteChannels
+          .new
+          .all
+          .select do |ch|
+            keyword.blank? ||
+              ch[:channel_id].include?(keyword) ||
+              ch[:title].downcase.include?(keyword.downcase)
+          end
+      return
+    end
+
     @channels = []
 
     # ID入力がなければ何もしない

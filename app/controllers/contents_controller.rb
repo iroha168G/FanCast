@@ -26,15 +26,21 @@ class ContentsController < ApplicationController
   # =====================================
   def fetch_login_videos(status)
     youtube = Rails.application.config.youtube_service
-    fetcher = Youtube::ChannelVideosFetcher.new(youtube_service: youtube)
+
+    client =
+      Youtube::Client.new(
+        user: current_user,
+        youtube_service: youtube
+      )
 
     videos =
-      current_user.user_favorite_channels.includes(:channel).flat_map do |favorite|
-        fetcher.fetch(
-          favorite.channel.channel_identifier,
-          status
-        )
+      current_user.favorite_channels_for_view.flat_map do |channel|
+        client.fetch(channel.channel_identifier, status)
       end
+
+    if current_user.mock?
+      return normalize_videos_by_status(videos, {}, status)
+    end
 
     channel_icons =
       fetch_channel_icons(
@@ -48,6 +54,9 @@ class ContentsController < ApplicationController
     []
   end
 
+  # =====================================
+  # キーワード検索
+  # =====================================
   def filter_by_keyword(videos)
     keyword = params[:keyword].to_s.downcase
 
@@ -73,22 +82,25 @@ class ContentsController < ApplicationController
     Rails.cache.fetch("guest:live:videos:base:v1", expires_in: 30.minutes) do
       youtube = Rails.application.config.youtube_service
 
-      search_response = youtube.list_searches(
-        "snippet",
-        event_type: "live",
-        type: "video",
-        q: "作業用BGM",
-        max_results: 50
-      )
+      search_response =
+        youtube.list_searches(
+          "snippet",
+          event_type: "live",
+          type: "video",
+          q: "作業用BGM",
+          max_results: 50
+        )
 
       video_ids = search_response.items.map { |v| v.id.video_id }
-      next [] if video_ids.empty?
+      return [] if video_ids.empty?
 
       videos =
-        youtube.list_videos(
-          "snippet,liveStreamingDetails",
-          id: video_ids.join(",")
-        ).items
+        youtube
+          .list_videos(
+            "snippet,liveStreamingDetails",
+            id: video_ids.join(",")
+          )
+          .items
 
       channel_icons =
         fetch_channel_icons(
@@ -104,7 +116,7 @@ class ContentsController < ApplicationController
   end
 
   # =====================================
-  # チャンネルアイコン取得（キャッシュ付き）
+  # チャンネルアイコン取得
   # =====================================
   def fetch_channel_icons(youtube, channel_ids)
     return {} if channel_ids.blank?
@@ -130,7 +142,7 @@ class ContentsController < ApplicationController
   end
 
   # =====================================
-  # 共通処理
+  # 正規化
   # =====================================
   def normalize_videos(videos, channel_icons)
     videos.map do |video|
