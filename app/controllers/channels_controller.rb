@@ -9,7 +9,7 @@ class ChannelsController < ApplicationController
     if current_user&.mock?
       keyword = params[:keyword].to_s
 
-      @channels = 
+      @channels =
         Youtube::Mock::FavoriteChannels
           .new
           .all
@@ -48,7 +48,7 @@ class ChannelsController < ApplicationController
     if current_user&.mock?
       keyword = params[:keyword].to_s
 
-      @channels = 
+      @channels =
         Youtube::Mock::FavoriteChannels
           .new
           .all
