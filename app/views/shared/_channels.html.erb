@@ -1,6 +1,6 @@
-<div class="grid gap-4 justify-center box-border grid-cols-[repeat(auto-fit,minmax(260px,1fr))] p-10 mx-auto max-w-screen-xl">
+<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-content-center p-10 mx-auto max-w-screen-xl">
   <% @channels.each do |channel| %>
-    <div class="shadow-md rounded bg-white w-70 h-80 overflow-hidden">
+    <div class="shadow-md rounded bg-white w-full max-w-[290px] h-[340px] overflow-hidden mx-auto">
       <div>
         <%= image_tag "yt_icon_red_digital.png",
               alt: "Youtube",

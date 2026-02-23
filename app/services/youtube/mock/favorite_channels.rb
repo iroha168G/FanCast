@@ -15,8 +15,8 @@ module Youtube
             thumbnail_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
             subscribers: 1,
             url: "https://www.youtube.com/channel/UCrXUsMBcfTVqwAS7DKg9C0Q",
-            db_id: nil,
-            favorite_id: nil
+            db_id: 1,
+            favorite_id: 1
           ),
           OpenStruct.new(
             channel_id: "mock_channel_002",
@@ -28,8 +28,8 @@ module Youtube
             thumbnail_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
             subscribers: 1000,
             url: "https://www.youtube.com/channel/UCrXUsMBcfTVqwAS7DKg9C0Q",
-            db_id: 1,
-            favorite_id: 1
+            db_id: 2,
+            favorite_id: 2
           ),
           OpenStruct.new(
             channel_id: "mock_channel_003",
@@ -41,8 +41,8 @@ module Youtube
             thumbnail_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
             subscribers: 1000000,
             url: "https://www.youtube.com/channel/UCrXUsMBcfTVqwAS7DKg9C0Q",
-            db_id: nil,
-            favorite_id: nil
+            db_id: 3,
+            favorite_id: 3
           ),
           OpenStruct.new(
             channel_id: "mock_channel_004",
@@ -54,8 +54,8 @@ module Youtube
             thumbnail_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
             subscribers: 100000000,
             url: "https://www.youtube.com/channel/UCrXUsMBcfTVqwAS7DKg9C0Q",
-            db_id: 1,
-            favorite_id: 1
+            db_id: nil,
+            favorite_id: nil
           )
         ]
       end
