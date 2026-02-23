@@ -4,11 +4,12 @@ module Youtube
   module Mock
     class ChannelVideosFetcher
       STATUSES = %i[live upcoming archive].freeze
-      PER_STATUS = 20
+      PER_STATUS = 10
 
       CHANNELS = [
         { id: "mock_channel_001", title: "Mock Channel 1" },
-        { id: "mock_channel_002", title: "Mock Channel 2" }
+        { id: "mock_channel_002", title: "Mock Channel 2" },
+        { id: "mock_channel_003", title: "Mock Channel 3" }
       ].freeze
 
       def fetch(channel_id, status)

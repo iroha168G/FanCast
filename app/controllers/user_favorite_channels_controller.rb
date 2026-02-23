@@ -5,7 +5,7 @@ class UserFavoriteChannelsController < ApplicationController
     if current_user.mock?
       redirect_back(
         fallback_location: channels_search_path(keyword: params[:channel_identifier]),
-        notice: "demo チャンネルを登録しました。"
+        notice: "【デモ版】チャンネルを登録しました。"
         )
       return
     end
@@ -39,7 +39,7 @@ class UserFavoriteChannelsController < ApplicationController
     if current_user.mock?
       redirect_back(
         fallback_location: root_path,
-        notice: "（デモ）チャンネルの登録を解除しました。"
+        notice: "【デモ版】チャンネルの登録を解除しました。"
       )
       return
     end
