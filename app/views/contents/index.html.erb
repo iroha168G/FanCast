@@ -30,11 +30,13 @@
                     alt="<%= video[:title] %>",
                     class="absolute inset-0 w-full h-full object-cover"
               >
-              <div class="absolute right-2 bg-black/80 text-white text-xs px-2 py-1 my-2 rounded pointer-events-none"
-                   style="background-color: rgba(0,0,0,0.5);"
-              >
-                <%= format_duration(video[:archive_duration]) %>
-              </div>
+              <% if video[:archive_duration].present? %>
+                <div class="absolute right-2 bg-black/80 text-white text-xs px-2 py-1 my-2 rounded pointer-events-none"
+                     style="background-color: rgba(0,0,0,0.5);"
+                >
+                  <%= format_duration(video[:archive_duration]) %>
+                </div>
+              <% end %>
             </div>
 
 

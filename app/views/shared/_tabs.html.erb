@@ -1,11 +1,11 @@
-<ul class="flex gap-4 p-4 justify-center items-center">
+<ul class="flex gap-4 p-4 justify-center items-center overflow-x-auto whitespace-nowrap">
   <li>
-    <%= link_to "配信中", root_path(status: "live"), class: tab_class("live") %>
+    <%= link_to "配信中", root_path(status: "live"), class: "#{tab_class("live")} inline-block px-2 py-2" %>
   </li>
   <li>
-    <%= link_to "配信予定", root_path(status: "upcoming"), class: tab_class("upcoming") %>
+    <%= link_to "配信予定", root_path(status: "upcoming"), class: "#{tab_class("upcoming")} inline-block px-2 py-2" %>
   </li>
   <li>
-    <%= link_to "アーカイブ", root_path(status: "archive"), class: tab_class("archive") %>
+    <%= link_to "アーカイブ", root_path(status: "archive"), class: "#{tab_class("archive")} inline-block px-2 py-2" %>
   </li>
 </ul>
