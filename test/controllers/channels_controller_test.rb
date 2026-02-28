@@ -7,7 +7,7 @@ class ChannelsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get channels_new_url
+    get new_channels_url
     assert_response :success
   end
 
