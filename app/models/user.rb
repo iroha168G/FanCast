@@ -18,8 +18,11 @@ class User < ApplicationRecord
             format: { with: VALID_EMAIL_REGEX },
             uniqueness: { case_sensitive: false }
 
-  # allow_nil: true は「更新時のみ省略可」という意味
-  validates :password, presence: true, length: { minimum: 4 }, allow_nil: true
+  # allow_nil: true = 更新時のみ省略可
+  validates :password,
+            presence: true,
+            length: { minimum: 4 },
+            allow_nil: true
 
   # ==============================
   # コールバック
@@ -66,10 +69,10 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
 
-  # reset_token を作って DB に保存
+  # reset_token を作って DB に保存（★ここ重要）
   def create_reset_digest
     self.reset_token = User.new_token
-    update!(
+    update_columns(
       reset_digest: User.digest(reset_token),
       reset_sent_at: Time.current
     )
@@ -80,6 +83,7 @@ class User < ApplicationRecord
     return false if reset_digest.blank? || token.blank?
     BCrypt::Password.new(reset_digest).is_password?(token)
   end
+
   # トークン期限（2時間）
   def reset_token_valid?
     reset_sent_at.present? && reset_sent_at > 2.hours.ago

@@ -5,11 +5,7 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     user = users(:one)
     user.create_reset_digest
 
-    get edit_password_reset_url(
-      user.id,
-      token: user.reset_token
-    )
-
+    get edit_password_reset_url(user.id, token: user.reset_token)
     assert_response :success
   end
 
@@ -17,11 +13,7 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     user = users(:one)
     user.create_reset_digest
 
-    get edit_password_reset_url(
-      user.id,
-      token: "invalid"
-    )
-
+    get edit_password_reset_url(user.id, token: "invalid")
     assert_redirected_to root_url
   end
 end
