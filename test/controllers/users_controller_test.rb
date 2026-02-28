@@ -7,16 +7,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create user" do
+    email = "test_#{SecureRandom.uuid}@example.com"
+
     assert_difference("User.count", 1) do
       post users_url, params: {
         user: {
           name: "Test",
-          email: "test@example.com",
+          email: email,
           password: "password",
           password_confirmation: "password"
         }
       }
     end
+
     assert_redirected_to root_url
   end
 end
