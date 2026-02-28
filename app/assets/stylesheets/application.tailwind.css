@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@source "../../views/shared/_tabs.html.erb";
 
 .auth-container {
   display: flex;
@@ -34,7 +33,7 @@
 }
 
 .form-input {
-  width: 100%;
+  width: 200%;
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
