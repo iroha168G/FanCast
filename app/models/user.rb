@@ -79,7 +79,6 @@ class User < ApplicationRecord
   def authenticated?(token)
     return false if reset_digest.blank? || token.blank?
     BCrypt::Password.new(reset_digest).is_password?(token)
-
   end
   # トークン期限（2時間）
   def reset_token_valid?
