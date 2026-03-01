@@ -21,11 +21,16 @@
     <!-- パンくず -->
     <%= yield :breadcrumbs %>
     <!-- フラッシュ（← ここで位置を固定） -->
-    <div class="max-w-screen-xl mx-auto px-4 mt-4">
-      <%= yield :flash %>
-    </div>
+    <% if content_for?(:flash) %>
+      <div class="max-w-screen-xl mx-auto px-4 mt-4">
+        <%= yield :flash %>
+      </div>
+    <% end %>
 
     <%= yield %>
+
+    <!-- フッターー -->
+    <%= yield :footer %>
 
     <script>
       document.addEventListener("click", function (e) {

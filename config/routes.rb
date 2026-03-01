@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "/terms", to: "pages#terms"
+  get "/privacy", to: "pages#privacy"
   get "password_resets/new"
   get "password_resets/edit"
   get "channels/index"

@@ -65,4 +65,7 @@
   <% if params[:keyword].present? && flash.now[:alert].blank? && @videos.empty? %>
     <p class="text-center text-red-700">コンテンツが見つかりません。</p>
   <% end %>
+  <% content_for :footer do %>
+    <%= render "shared/footer" %>
+  <% end %>
 </body>
