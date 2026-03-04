@@ -9,7 +9,7 @@ class User < ApplicationRecord
   # ==============================
   # バリデーション
   # ==============================
-  validates :name, presence: true, length: { maximum: 50 }
+  validates :name, presence: true, length: { maximum: 32 }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email,
@@ -18,11 +18,14 @@ class User < ApplicationRecord
             format: { with: VALID_EMAIL_REGEX },
             uniqueness: { case_sensitive: false }
 
-  # allow_nil: true = 更新時のみ省略可
+  before_validation :strip_password
   validates :password,
             presence: true,
             length: { minimum: 4 },
-            allow_nil: true
+            format: {
+              with: /\A[a-zA-Z0-9]+\z/,
+              message: "は半角英数字のみで入力してください"
+            }
 
   # ==============================
   # コールバック
@@ -110,4 +113,10 @@ class User < ApplicationRecord
   has_many :favorite_channels,
            through: :user_favorite_channels,
            source: :channel
+
+  private
+
+  def strip_password
+    self.password = password.strip if password.present?
+  end
 end

@@ -1,3 +1,4 @@
+
 <% content_for :header do %>
   <div class="mb-4">
     <%= render "shared/header" %>
@@ -30,11 +31,10 @@
                     alt="<%= video[:title] %>",
                     class="absolute inset-0 w-full h-full object-cover"
               >
-              <% if video[:archive_duration].present? %>
-                <div class="absolute right-2 bg-black/80 text-white text-xs px-2 py-1 my-2 rounded pointer-events-none"
-                     style="background-color: rgba(0,0,0,0.5);"
-                >
-                  <%= format_duration(video[:archive_duration]) %>
+              <% formatted = format_duration(video[:archive_duration]) %>
+              <% if formatted.present? %>
+                <div class="absolute right-2 bottom-2 bg-black/80 text-white text-xs px-2 py-1 rounded pointer-events-none">
+                  <%= formatted %>
                 </div>
               <% end %>
             </div>
@@ -62,10 +62,20 @@
       </div>
     <% end %>
   </div>
-  <% if params[:keyword].present? && flash.now[:alert].blank? && @videos.empty? %>
-    <p class="text-center text-red-700">コンテンツが見つかりません。</p>
-  <% end %>
-  <% content_for :footer do %>
-    <%= render "shared/footer" %>
+  <% if @videos.empty? && flash.now[:alert].blank? %>
+    <div class="flex flex-col justify-center items-center min-h-[55vh]">
+      <% if params[:keyword].present? %>
+        <p class="text-center text-red-700">
+          コンテンツが見つかりません。
+        </p>
+      <% else %>
+        <p class="text-center text-red-700">
+          現在表示できるコンテンツがありません。
+        </p>
+      <% end %>
+    </div>
   <% end %>
 </body>
+<% content_for :footer do %>
+  <%= render "shared/footer" %>
+<% end %>

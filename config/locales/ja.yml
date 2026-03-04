@@ -2,7 +2,7 @@ ja:
   activerecord:
     attributes:
       user:
-        name: 名前
+        name: ユーザー名
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード（確認用）
@@ -13,10 +13,12 @@ ja:
           attributes:
             name:
               blank: "を入力してください。"
+              too_long: "は %{count} 文字以内で入力してください。"
             email:
               blank: "を入力してください。"
               invalid: "の形式が正しくありません。"
               taken: "はすでに使われています。"
+              too_long: "は %{count} 文字以内で入力してください。"
             password:
               blank: "を入力してください。"
               too_short: "は%{count}文字以上で入力してください。"
