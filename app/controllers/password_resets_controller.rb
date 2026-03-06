@@ -8,6 +8,11 @@ class PasswordResetsController < ApplicationController
 
   # メール送信（ユーザー存在有無は隠す）
   def create
+    if params[:password_reset][:email].blank?
+      redirect_to new_password_reset_path, alert: "メールアドレスを入力してください。"
+      return
+    end
+
     user = User.find_by(email: params[:password_reset][:email].downcase)
 
     if user

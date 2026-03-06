@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
-      redirect_to root_path, notice: "アカウントの登録が完了しました。"
+      redirect_to root_path, notice: "アカウントの登録が完了しました。\nログインしてご利用ください。"
     else
       # 保存失敗 → newを再表示
       render :new, status: :unprocessable_entity

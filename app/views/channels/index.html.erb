@@ -54,7 +54,7 @@
             <%= link_to "https://www.youtube.com/channel/#{channel[:channel_identifier]}",
                 target: "_blank",
                 rel: "noopener noreferrer",
-                class: "w-full min-w-0 text-sm text-center font-medium line-clamp-1 break-words overflow-hidden text-blue-600 visited:text-purple-600 hover:underline" do %>
+                class: "w-full min-w-0 text-sm text-center font-medium py-2 break-words overflow-hidden text-blue-600 visited:text-purple-600 hover:underline" do %>
               <div class="w-32 h-32 rounded-full mx-auto">
                 <% if channel[:thumbnail_url].present? %>
                   <img src="<%= channel[:thumbnail_url] %>" class="w-24 h-24 rounded-full mx-auto">
@@ -92,6 +92,6 @@
     </div>
   <% end %>
   <% if params[:keyword].present? && flash.now[:alert].blank? && @channels.empty? %>
-    <p class="text-center text-red-700">チャンネルが見つかりません</p>
+    <p class="text-center text-red-700">チャンネルが見つかりません。</p>
   <% end %>
 </body>
