@@ -70,4 +70,4 @@ gem "importmap-rails", "~> 2.2"
 
 gem "ransack"
 
-gem "rspec-rails", "~> 8.0", groups: [:development, :test]
+gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]

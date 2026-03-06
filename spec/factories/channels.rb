@@ -3,6 +3,6 @@ FactoryBot.define do
     platform { "youtube" }
     name { "テスト" }
     channel_identifier { "test_id" }
-    thumbnail_url { "https://example.com/thumb.png"}
+    thumbnail_url { "https://example.com/thumb.png" }
   end
 end

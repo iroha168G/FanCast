@@ -10,7 +10,7 @@ RSpec.describe "Channels", type: :request do
         password: user.password
       }
     end
-    
+
     it "一覧ページが表示される" do
       get channels_path
       expect(response).to have_http_status(:ok)
@@ -22,7 +22,7 @@ RSpec.describe "Channels", type: :request do
     end
   end
 
-  describe "ログインしてない場合はアクセスできない" do    
+  describe "ログインしてない場合はアクセスできない" do
     it "一覧ページが表示されずにログイン画面にリダイレクト" do
       get channels_path
       expect(response).to redirect_to(login_path)
