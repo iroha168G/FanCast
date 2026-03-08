@@ -153,8 +153,8 @@ class ContentsController < ApplicationController
         channel_title: video.snippet.channel_title,
         channel_id: video.snippet.channel_id,
         channel_icon: channel_icons[video.snippet.channel_id],
-        live_starttime: video.live_streaming_details&.actual_start_time,
-        scheduled_starttime: video.live_streaming_details&.scheduled_start_time,
+        live_starttime: video.live_streaming_details&.actual_start_time&.in_time_zone("Tokyo"),
+        scheduled_starttime: video.live_streaming_details&.scheduled_start_time&.in_time_zone("Tokyo"),
         archive_duration: video.content_details&.duration,
         live_viewers: video.live_streaming_details&.concurrent_viewers
       }
