@@ -68,7 +68,6 @@ password123
 sample2@fancast.jp  
 password123
 
-
 ## 使い方
 
 ### ログイン
