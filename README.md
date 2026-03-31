@@ -52,11 +52,11 @@ Vtuberやストリーマーの配信を日常的に視聴していると、「�
 
 | カテゴリ | 技術 |
 |---|---|
-| フロントエンド | Tailwind CSS / JavaScript |
+| フロントエンド | HTML / Tailwind CSS / JavaScript |
 | バックエンド | Ruby 3.3.6 / Ruby on Rails 7.2.2 |
 | データベース | PostgreSQL |
 | API | YouTube Data API v3 |
-| インフラ | Docker / Render |
+| その他 | Docker / Render |
 
 ## アカウント
 
